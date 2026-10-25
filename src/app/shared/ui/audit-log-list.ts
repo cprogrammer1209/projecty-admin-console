@@ -8,6 +8,7 @@ const ACTION_TEXT: Record<string, (e: AuditEvent) => string> = {
   IMPERSONATION_REQUESTED: (e) => `requested impersonation of ${e.targetName ?? 'a user'}`,
   IMPERSONATION_STARTED: (e) => `signed in as ${e.targetName ?? 'a user'}`,
   IMPERSONATION_ENDED: (e) => `ended the support session as ${e.targetName ?? 'a user'}`,
+  PORTAL_SETTINGS_CHANGED: () => 'changed portal settings',
 };
 
 /** "requested impersonation of Arun Kumar", without the actor. */
