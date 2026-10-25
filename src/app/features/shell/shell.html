@@ -1,0 +1,39 @@
+<div class="app">
+  <aside>
+    <a class="brand" routerLink="/tenants">
+      <span class="mark"><svg viewBox="0 0 32 32"><path d="M7 7 16 17 25 7M16 17V27" /><circle cx="16" cy="17" r="4" /></svg></span>
+      <span class="brand-name">ProjectY</span>
+    </a>
+    <div>
+      <div class="section-label">Administration</div>
+      <nav class="nav">
+        <a routerLink="/tenants" routerLinkActive="active"><pa-icon name="tenants" /><span>Tenants</span></a>
+        <a routerLink="/audit" routerLinkActive="active"><pa-icon name="audit" /><span>Audit logs</span></a>
+      </nav>
+    </div>
+    <div class="side-foot">Platform administration<br /><span class="mono">ProjectY</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="crumb">Platform admin / <strong>{{ crumb() }}</strong></div>
+      <div class="top-actions">
+        <label class="search">
+          <pa-icon name="search" />
+          <input placeholder="Search tenants and users..." aria-label="Search" [value]="search.query()" (input)="onSearch($event)" />
+        </label>
+        <button class="icon-btn" type="button" title="Toggle theme"
+                [attr.aria-label]="theme.theme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+                (click)="theme.toggle()"><pa-icon name="theme" /></button>
+        <button class="avatar" type="button" style="border: 0; cursor: pointer"
+                [title]="'Sign out ' + (auth.admin()?.email ?? '')" aria-label="Sign out" (click)="signOut()">
+          {{ initials(auth.admin()?.fullName) }}
+        </button>
+      </div>
+    </header>
+    <div class="content">
+      <router-outlet />
+    </div>
+  </main>
+</div>
+<pa-toast />

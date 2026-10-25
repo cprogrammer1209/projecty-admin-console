@@ -1,0 +1,226 @@
+@use './styles/projecty-tokens.css';
+
+/* Ported from projecty-tenant-admin.html; colours come from the --py-* tokens. */
+
+
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--py-surface-1);color:var(--py-ink);font:13px/1.5 var(--py-font-ui)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+[hidden]{display:none!important}
+.app{min-height:100vh;display:grid;grid-template-columns:226px minmax(0,1fr)}
+aside{background:var(--py-surface-0);border-right:1px solid var(--py-border);padding:22px 12px;display:flex;flex-direction:column;gap:28px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 10px;font-size:16px;font-weight:600;letter-spacing:-.03em}
+.mark{background:#2a5bd7;border-radius:7px;width:29px;height:29px;display:grid;place-items:center;color:#fff}
+.mark svg{stroke-width:3}
+.mark circle{fill:var(--py-accent);stroke:#2a5bd7;stroke-width:2}
+.section-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--py-ink-muted);padding:0 12px;margin-bottom:7px}
+.nav{display:grid;gap:3px}
+.nav button{display:flex;align-items:center;gap:10px;padding:10px 12px;border:0;border-radius:7px;background:transparent;color:var(--py-ink-muted);text-align:left}
+.nav button.active,.nav button:hover{background:var(--py-brand-subtle);color:var(--py-brand)}
+.nav button span{flex:1}
+.side-foot{margin-top:auto;border-top:1px solid var(--py-border);padding:14px 10px;color:var(--py-ink-muted);font-size:11px}
+.main{min-width:0}
+.topbar{height:58px;background:var(--py-surface-0);border-bottom:1px solid var(--py-border);display:flex;align-items:center;padding:0 26px;gap:12px;position:sticky;top:0;z-index:5}
+.crumb{font-size:12px;color:var(--py-ink-muted)}
+.crumb strong{color:var(--py-ink);font-weight:500}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--py-border);border-radius:7px;height:34px;padding:0 10px;width:min(280px,32vw);background:var(--py-surface-0);color:var(--py-ink-muted)}
+.search input{border:0;outline:0;min-width:0;width:100%;background:transparent;color:var(--py-ink)}
+.avatar{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:#e7d9ca;color:#62432b;font-size:10px;font-weight:600}
+.icon-btn{width:31px;height:31px;border:1px solid var(--py-border);border-radius:6px;background:var(--py-surface-0);color:var(--py-ink-muted);display:inline-grid;place-items:center}
+.icon-btn:hover{background:var(--py-brand-subtle);color:var(--py-brand)}
+.content{padding:28px 30px 50px;max-width:1500px;margin:auto}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:22px}
+.eyebrow{font-size:10px;color:var(--py-ink-muted);letter-spacing:.06em;margin-bottom:5px}
+.head h1{font-size:25px;line-height:1.2;letter-spacing:-.04em;margin:0;font-weight:600}
+.head p{color:var(--py-ink-muted);font-size:12px;margin:7px 0 0}
+.btn{height:34px;padding:0 12px;border:1px solid var(--py-border-control);border-radius:7px;background:var(--py-surface-0);color:var(--py-ink);display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12px;font-weight:500}
+.btn.primary{background:var(--py-brand);border-color:var(--py-brand);color:var(--py-on-brand)}
+.btn:hover{filter:brightness(.97)}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.metric,.panel{background:var(--py-surface-0);border:1px solid var(--py-border);border-radius:9px}
+.metric{padding:15px}
+.metric small{color:var(--py-ink-muted);font-size:11px}
+.metric strong{display:block;font-size:24px;letter-spacing:-.04em;margin:7px 0 2px}
+.metric .foot{font-size:10px;color:var(--py-ink-muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;align-items:start}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;border-bottom:1px solid var(--py-border)}
+.panel-head h2{font-size:13px;margin:0;font-weight:600}
+.panel-head p{font-size:11px;color:var(--py-ink-muted);margin:3px 0 0}
+.table-wrap{overflow:auto}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th{text-align:left;background:var(--py-surface-1);font-size:10px;color:var(--py-ink-muted);text-transform:uppercase;letter-spacing:.05em;padding:10px 13px;border-bottom:1px solid var(--py-border)}
+td{padding:12px 13px;border-bottom:1px solid var(--py-border);font-size:11px}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--py-surface-1)}
+.tenant{display:flex;align-items:center;gap:9px;min-width:175px}
+.tenant-mark{width:32px;height:32px;border-radius:8px;background:var(--py-brand-subtle);color:var(--py-brand);display:grid;place-items:center;font-weight:600;font-size:10px;flex-shrink:0}
+.tenant strong{display:block;font-size:11px;font-weight:600}
+.tenant small{display:block;color:var(--py-ink-muted);font-size:9px;font-family:var(--py-font-mono);margin-top:2px}
+.link-btn{border:0;padding:0;background:none;color:var(--py-brand);font-weight:600;text-align:left}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:5px;background:var(--py-surface-2);color:var(--py-ink-muted);font-size:10px;white-space:nowrap}
+.badge.active{background:color-mix(in srgb,var(--py-status-done) 12%,transparent);color:var(--py-status-done)}
+.badge.suspended{background:color-mix(in srgb,var(--py-status-blocked) 10%,transparent);color:var(--py-status-blocked)}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.row-actions{display:flex;gap:4px}
+.row-actions .icon-btn{width:28px;height:28px}
+.side-stack{display:grid;gap:14px}
+.side-card{padding:16px}
+.side-card h3{font-size:12px;margin:0 0 10px}
+.side-card p{font-size:11px;color:var(--py-ink-muted);margin:0 0 12px}
+.side-card .btn{width:100%;justify-content:flex-start;margin:4px 0}
+.side-row{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--py-border);font-size:11px}
+.side-row span{color:var(--py-ink-muted)}
+.callout{background:var(--py-surface-1);border:1px solid var(--py-border);padding:12px;border-radius:8px;font-size:11px;color:var(--py-ink-muted);line-height:1.6}
+.callout strong{color:var(--py-ink)}
+
+.back{border:0;background:transparent;color:var(--py-ink-muted);padding:0;margin:0 0 16px;display:flex;gap:7px;align-items:center}
+.tenant-hero{display:flex;align-items:center;gap:13px;margin-bottom:20px}
+.tenant-hero .tenant-mark{width:49px;height:49px;font-size:15px}
+.tenant-hero h1{font-size:23px;margin:0;letter-spacing:-.04em}
+.tenant-hero p{font-size:11px;color:var(--py-ink-muted);margin:4px 0 0}
+.hero-actions{margin-left:auto;display:flex;gap:8px}
+.tabs{display:flex;gap:5px;overflow:auto;border-bottom:1px solid var(--py-border);margin-bottom:17px}
+.tabs button{border:0;border-bottom:2px solid transparent;background:none;padding:11px 13px;margin-bottom:-1px;color:var(--py-ink-muted);white-space:nowrap;font-size:12px}
+.tabs button.active{border-bottom-color:var(--py-brand);color:var(--py-brand);font-weight:600}
+.detail-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px}
+.detail-card{padding:18px}
+.detail-card h2{font-size:13px;margin:0 0 17px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field label{display:block;color:var(--py-ink-muted);font-size:10px;margin-bottom:5px}
+.field .value{font-size:12px;font-weight:500;overflow-wrap:anywhere}
+.field input,.field select,.field textarea{height:35px;border:1px solid var(--py-border-control);border-radius:6px;padding:0 9px;width:100%;background:var(--py-surface-0);color:var(--py-ink);font-size:12px}
+.field textarea{height:auto;min-height:88px;padding:9px;resize:vertical}
+.form-actions{margin-top:18px}
+.mini-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:15px}
+.mini-metric{padding:12px;border:1px solid var(--py-border);border-radius:8px;background:var(--py-surface-0)}
+.mini-metric strong{display:block;font-size:20px}
+.mini-metric small{color:var(--py-ink-muted);font-size:10px}
+.log{display:grid;grid-template-columns:29px minmax(0,1fr) auto;gap:10px;padding:13px 17px;border-bottom:1px solid var(--py-border);align-items:start}
+.log:last-child{border-bottom:0}
+.log-icon{width:28px;height:28px;border-radius:50%;background:var(--py-surface-1);display:grid;place-items:center;color:var(--py-ink-muted)}
+.log-copy{font-size:11px;line-height:1.6}
+.log-copy small{display:block;color:var(--py-ink-muted);font-size:10px;margin-top:3px}
+.placeholder{text-align:center;padding:40px 20px}
+.placeholder h3{font-size:13px;margin:0 0 6px}
+.placeholder p{font-size:11px;color:var(--py-ink-muted);max-width:380px;margin:auto}
+.empty{text-align:center;padding:25px;color:var(--py-ink-muted);font-size:12px}
+.pagination{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-top:1px solid var(--py-border);font-size:10px;color:var(--py-ink-muted)}
+
+.overlay{position:fixed;inset:0;background:#0c101877;z-index:20;display:grid;place-items:center;padding:18px}
+.modal{width:min(510px,100%);max-height:90vh;overflow:auto;background:var(--py-surface-0);border:1px solid var(--py-border);border-radius:12px;box-shadow:var(--py-shadow-lg)}
+.modal-head,.modal-foot{display:flex;justify-content:space-between;align-items:center;padding:16px 19px;border-bottom:1px solid var(--py-border)}
+.modal-head h2{font-size:15px;margin:0}
+.modal-head p{font-size:11px;color:var(--py-ink-muted);margin:4px 0 0}
+.modal-body{padding:18px 19px}
+.modal-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.modal-fields .full{grid-column:1/-1}
+.modal-foot{justify-content:flex-end;gap:8px;border-top:1px solid var(--py-border);border-bottom:0}
+.confirm-copy{font-size:12px;color:var(--py-ink-muted);line-height:1.7}
+.warning{background:color-mix(in srgb,var(--py-accent) 14%,var(--py-surface-0));border:1px solid color-mix(in srgb,var(--py-accent) 45%,var(--py-border));border-radius:7px;padding:10px;font-size:11px;line-height:1.6}
+.identity{display:flex;align-items:center;gap:10px;border:1px solid var(--py-border);padding:12px;border-radius:8px}
+.identity strong{display:block;font-size:12px}
+.identity small{font-size:10px;color:var(--py-ink-muted)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--py-ink);color:var(--py-surface-0);border-radius:8px;padding:11px 15px;box-shadow:var(--py-shadow-lg);opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:40}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:1080px){.layout,.detail-grid{grid-template-columns:1fr}
+.side-stack{grid-template-columns:1fr 1fr}
+.metrics{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:720px){.app{grid-template-columns:60px minmax(0,1fr)}
+aside{padding:18px 6px;align-items:center}
+.brand{padding:0}
+.brand-name,.section-label,.nav span,.side-foot{display:none}
+.nav{width:100%}
+.nav button{justify-content:center;padding:11px 0}
+.topbar{padding:0 12px}
+.crumb{display:none}
+.content{padding:20px 12px}
+.head{flex-direction:column}
+.hero-actions{margin-left:0;width:100%}
+.hero-actions .btn{flex:1}
+.side-stack{display:flex}
+.search{width:auto;flex:1}
+.fields,.modal-fields{grid-template-columns:1fr}
+.modal-fields .full{grid-column:auto}
+}
+@media(max-width:450px){.metrics{gap:7px}
+.metric{padding:11px}
+.metric strong{font-size:21px}
+.head h1{font-size:22px}
+.mini-metrics{gap:5px}
+.mini-metric{padding:8px}
+.mini-metric strong{font-size:17px}
+}
+
+
+
+.login-screen{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(380px,.95fr);background:var(--py-surface-0)}
+.login-brand-panel{background:#14244b;color:#fff;padding:clamp(32px,6vw,86px);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.login-brand-panel:before,.login-brand-panel:after{content:"";position:absolute;border:1px solid #ffffff1b;border-radius:50%;width:480px;height:480px;right:-160px;top:15%}
+.login-brand-panel:after{width:340px;height:340px;right:-90px;top:25%}
+.login-brand{display:flex;align-items:center;gap:11px;font-size:18px;font-weight:600;position:relative;z-index:1}
+.login-brand .mark{width:34px;height:34px}
+.login-promo{position:relative;z-index:1;max-width:510px}
+.login-promo .overline{font-size:10px;letter-spacing:.15em;color:#aebff5;text-transform:uppercase;margin-bottom:18px}
+.login-promo h1{font-size:clamp(30px,4vw,48px);line-height:1.1;letter-spacing:-.055em;margin:0 0 18px;font-weight:600}
+.login-promo p{font-size:14px;line-height:1.8;color:#c5cfe6;max-width:410px}
+.login-promo .login-feature{display:flex;gap:10px;align-items:center;margin-top:28px;color:#e1e8fb;font-size:12px}
+.login-feature svg{color:#ffb547}
+.login-foot{position:relative;z-index:1;font-size:10px;color:#aebbd7}
+.login-form-side{display:flex;align-items:center;justify-content:center;padding:36px 24px;background:var(--py-surface-1)}
+.login-card{width:min(390px,100%)}
+.login-card h2{font-size:25px;letter-spacing:-.04em;margin:0 0 7px}
+.login-card .intro{color:var(--py-ink-muted);font-size:12px;margin:0 0 27px}
+.login-field{margin-bottom:17px}
+.login-field label{display:block;font-size:11px;font-weight:600;margin-bottom:7px}
+.login-field input{height:43px;width:100%;border:1px solid var(--py-border-control);border-radius:7px;padding:0 12px;background:var(--py-surface-0);color:var(--py-ink);outline:none}
+.login-field input:focus{border-color:var(--py-brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--py-brand) 15%,transparent)}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:43px}
+.password-toggle{position:absolute;right:5px;top:5px;width:33px;height:33px;border:0;background:transparent;color:var(--py-ink-muted);display:grid;place-items:center}
+.login-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;margin:2px 0 22px}
+.remember{display:flex;align-items:center;gap:7px;color:var(--py-ink-muted)}
+.text-link{border:0;background:transparent;color:var(--py-brand);font-size:11px;padding:0}
+.login-submit{height:43px;width:100%;border:0;border-radius:7px;background:#2a5bd7;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.login-submit:hover{background:#2149b8}
+.login-error{font-size:11px;color:var(--py-status-blocked);margin:10px 0 0;min-height:15px}
+.login-demo-note{margin-top:22px;padding:11px 12px;background:var(--py-surface-0);border:1px solid var(--py-border);border-radius:7px;color:var(--py-ink-muted);font-size:10px;line-height:1.6}
+.login-demo-note strong{color:var(--py-ink)}
+.login-logged-out{display:none!important}
+
+@media(max-width:760px){.login-screen{grid-template-columns:1fr}
+.login-brand-panel{display:none}
+.login-form-side{min-height:100vh;padding:28px 22px}
+.login-card{max-width:420px}
+.login-card:before{content:"ProjectY";display:block;font-size:17px;font-weight:600;margin-bottom:42px;color:var(--py-ink)}
+}
+
+
+
+/* Additions for the Angular app */
+html,body{height:100%}
+a{color:var(--py-brand)}
+:focus-visible{outline:2px solid var(--py-focus-ring);outline-offset:2px}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.icon-btn[disabled]{opacity:.3;cursor:not-allowed}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:7px;color:var(--py-ink-muted);text-decoration:none}
+.nav a.active,.nav a:hover{background:var(--py-brand-subtle);color:var(--py-brand)}
+.nav a span{flex:1}
+.field .error{display:block;color:var(--py-status-blocked);font-size:10px;margin-top:5px}
+.field.invalid select,.field.invalid textarea,.field.invalid input{border-color:var(--py-status-blocked)}
+.login-field.invalid input{border-color:var(--py-status-blocked)}
+.login-submit[disabled]{opacity:.7;cursor:wait}
+.spinner{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{padding:25px;text-align:center;color:var(--py-ink-muted);font-size:12px}
+.mono{font-family:var(--py-font-mono)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.brand,.back,a.btn,a.icon-btn{text-decoration:none}
+.brand{color:var(--py-ink)}
+.back{color:var(--py-ink-muted)}
+a.btn{color:var(--py-ink)}

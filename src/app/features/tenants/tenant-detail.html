@@ -1,0 +1,126 @@
+<section>
+  <a class="back" routerLink="/tenants">← Back to tenants</a>
+
+  @if (error(); as message) {
+    <div class="panel placeholder"><h3>Tenant not available</h3><p>{{ message }}</p></div>
+  } @else if (tenant(); as t) {
+    <div class="tenant-hero">
+      <div class="tenant-mark">{{ initials(t.name) }}</div>
+      <div>
+        <h1>{{ t.name }}</h1>
+        <p><span class="mono">{{ t.id }}</span> · {{ t.slug }}.projecty.app · Created {{ t.createdAt | date: 'mediumDate' }}</p>
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" role="tab" [class.active]="activeTab() === 'details'" [attr.aria-selected]="activeTab() === 'details'" (click)="select('details')">Tenant details</button>
+      <button type="button" role="tab" [class.active]="activeTab() === 'users'" [attr.aria-selected]="activeTab() === 'users'" (click)="select('users')">Tenant users @if (users(); as u) { ({{ u.length }}) }</button>
+      <button type="button" role="tab" [class.active]="activeTab() === 'permissions'" [attr.aria-selected]="activeTab() === 'permissions'" (click)="select('permissions')">Permissions</button>
+      <button type="button" role="tab" [class.active]="activeTab() === 'activity'" [attr.aria-selected]="activeTab() === 'activity'" (click)="select('activity')">Activity logs</button>
+    </nav>
+
+    @switch (activeTab()) {
+      @case ('details') {
+        <div class="detail-grid">
+          <section class="panel detail-card">
+            <h2>Tenant information</h2>
+            <div class="fields">
+              <div class="field"><label>Tenant name</label><div class="value">{{ t.name }}</div></div>
+              <div class="field"><label>Tenant ID</label><div class="value mono" style="font-size: 11px">{{ t.id }}</div></div>
+              <div class="field"><label>Portal address</label><div class="value">{{ t.slug }}.projecty.app</div></div>
+              <div class="field"><label>Created on</label><div class="value">{{ t.createdAt | date: 'mediumDate' }}</div></div>
+              <div class="field"><label>Owner</label><div class="value">{{ t.ownerName ?? '—' }}</div></div>
+              <div class="field"><label>Owner email</label><div class="value">{{ t.ownerEmail ?? '—' }}</div></div>
+              <div class="field"><label>Users</label><div class="value">{{ t.userCount }}</div></div>
+              <div class="field"><label>Active users</label><div class="value">{{ t.activeUserCount }}</div></div>
+            </div>
+          </section>
+          <div class="side-stack">
+            <section class="panel side-card">
+              <h3>Tenant summary</h3>
+              <div class="side-row"><span>Total users</span><strong>{{ t.userCount }}</strong></div>
+              <div class="side-row"><span>Active users</span><strong>{{ t.activeUserCount }}</strong></div>
+              <div class="side-row"><span>Last activity</span><strong>{{ t.lastActivityAt ? (t.lastActivityAt | date: 'MMM d, h:mm a') : '—' }}</strong></div>
+              <div class="side-row"><span>Permissions</span><strong>Not configured</strong></div>
+            </section>
+            <section class="panel side-card">
+              <h3>Quick actions</h3>
+              <button class="btn" type="button" (click)="select('users')">Manage tenant users</button>
+              <button class="btn" type="button" (click)="select('activity')">View activity logs</button>
+            </section>
+          </div>
+        </div>
+      }
+      @case ('users') {
+        <div class="mini-metrics">
+          <div class="mini-metric"><strong>{{ users()?.length ?? '–' }}</strong><small>Total users</small></div>
+          <div class="mini-metric"><strong>{{ users() ? activeCount() : '–' }}</strong><small>Active users</small></div>
+          <div class="mini-metric"><strong>{{ users() ? users()!.length - activeCount() : '–' }}</strong><small>Inactive users</small></div>
+        </div>
+        <section class="panel">
+          <div class="panel-head">
+            <div><h2>Tenant users</h2><p>Members of this tenant and support access.</p></div>
+          </div>
+          <div style="padding: 12px 16px 0">
+            <label class="search" style="width: 250px"><pa-icon name="search" /><input placeholder="Search users..." aria-label="Search users" (input)="onUserSearch($event)" /></label>
+          </div>
+          <div class="table-wrap">
+            <table style="min-width: 700px">
+              <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Last active</th><th>Actions</th></tr></thead>
+              <tbody>
+                @if (!users()) {
+                  <tr><td colspan="5" class="loading">Loading users…</td></tr>
+                } @else {
+                  @for (u of visibleUsers(); track u.userId) {
+                    <tr>
+                      <td><div class="tenant"><span class="avatar">{{ initials(u.fullName) }}</span><div><strong>{{ u.fullName }}</strong><small>{{ u.email }}</small></div></div></td>
+                      <td>{{ profileLabel(u.profile) }}</td>
+                      <td><span class="badge" [class.active]="u.active" [class.suspended]="!u.active"><i class="dot"></i>{{ u.active ? 'Active' : 'Inactive' }}</span></td>
+                      <td>{{ u.lastLoginAt ? (u.lastLoginAt | date: 'MMM d, h:mm a') : 'Never' }}</td>
+                      <td>
+                        <div class="row-actions">
+                          <button class="icon-btn" type="button" [title]="'Sign in as ' + u.fullName" aria-label="Sign in as user"
+                                  [disabled]="!u.active" (click)="impersonating.set(u)"><pa-icon name="login" /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr><td colspan="5" class="empty">No users match your search.</td></tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <span>Showing {{ visibleUsers().length }} of {{ users()?.length ?? 0 }} users</span>
+            <span>Support sign-ins are recorded in activity logs.</span>
+          </div>
+        </section>
+      }
+      @case ('permissions') {
+        <section class="panel placeholder">
+          <h3>Tenant permissions</h3>
+          <p>This screen is reserved for the next iteration. Roles and permissions will be added later; no permission changes are available yet.</p>
+        </section>
+      }
+      @case ('activity') {
+        <section class="panel">
+          <div class="panel-head">
+            <div><h2>Tenant activity logs</h2><p>Administrative and support actions for this tenant.</p></div>
+          </div>
+          @if (events(); as list) {
+            <pa-audit-log-list [events]="list" emptyText="No activity recorded for this tenant yet." />
+          } @else {
+            <div class="loading">Loading activity…</div>
+          }
+        </section>
+      }
+    }
+
+    @if (impersonating(); as user) {
+      <pa-impersonation-dialog [tenant]="t" [user]="user" (closed)="impersonating.set(null)" (started)="loadActivity()" />
+    }
+  } @else {
+    <div class="loading">Loading tenant…</div>
+  }
+</section>

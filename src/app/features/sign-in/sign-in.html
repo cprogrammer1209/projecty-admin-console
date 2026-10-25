@@ -1,0 +1,48 @@
+<section class="login-screen">
+  <div class="login-brand-panel">
+    <div class="login-brand">
+      <span class="mark"><svg viewBox="0 0 32 32"><path d="M7 7 16 17 25 7M16 17V27" /><circle cx="16" cy="17" r="4" /></svg></span>
+      ProjectY
+    </div>
+    <div class="login-promo">
+      <div class="overline">Platform administration</div>
+      <h1>One workspace.<br />Every tenant.</h1>
+      <p>Manage customer workspaces, support access, users, and administrative activity from one secure control center.</p>
+      <div class="login-feature"><pa-icon name="check" /> Tenant and user administration</div>
+      <div class="login-feature"><pa-icon name="check" /> Controlled support impersonation</div>
+      <div class="login-feature"><pa-icon name="check" /> Auditable platform activity</div>
+    </div>
+    <div class="login-foot">ProjectY · Platform Admin</div>
+  </div>
+
+  <div class="login-form-side">
+    <form class="login-card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <h2>Sign in to ProjectY</h2>
+      <p class="intro">Enter your platform administrator credentials to continue.</p>
+
+      <div class="login-field" [class.invalid]="invalid('email')">
+        <label for="loginEmail">Work email</label>
+        <input id="loginEmail" type="email" formControlName="email" autocomplete="username" placeholder="you@company.com"
+               [attr.aria-invalid]="invalid('email')" />
+      </div>
+      <div class="login-field" [class.invalid]="invalid('password')">
+        <label for="loginPassword">Password</label>
+        <div class="password-wrap">
+          <input id="loginPassword" [type]="revealed() ? 'text' : 'password'" formControlName="password"
+                 autocomplete="current-password" placeholder="Enter your password" [attr.aria-invalid]="invalid('password')" />
+          <button type="button" class="password-toggle" [attr.aria-label]="revealed() ? 'Hide password' : 'Show password'"
+                  (click)="revealed.set(!revealed())"><pa-icon name="eye" /></button>
+        </div>
+      </div>
+      <div class="login-meta">
+        <span></span>
+        <button type="button" class="text-link" (click)="forgotPassword()">Forgot password?</button>
+      </div>
+
+      <button type="submit" class="login-submit" [disabled]="busy()">
+        @if (busy()) { <span class="spinner" aria-hidden="true"></span>Signing in } @else { Sign in <pa-icon name="arrow-right" /> }
+      </button>
+      <p class="login-error" role="status">{{ error() }}</p>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,101 @@
+<div class="overlay" (click)="close()">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="impModalTitle" (click)="$event.stopPropagation()">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="modal-head">
+        <div>
+          <h2 id="impModalTitle">Start impersonation</h2>
+          <p>Record the support session details before continuing.</p>
+        </div>
+        <button type="button" class="icon-btn" aria-label="Close" (click)="close()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="identity" style="margin-bottom: 16px">
+          <span class="tenant-mark">{{ initials(tenant().name) }}</span>
+          <div>
+            <strong>{{ tenant().name }}</strong>
+            <small>
+              @if (user(); as u) { {{ u.fullName }} · {{ u.email }} } @else { Select a tenant user below }
+              · {{ tenant().slug }}
+            </small>
+          </div>
+        </div>
+
+        @if (blockedLaunchUrl(); as url) {
+          <div class="warning" style="margin-bottom: 14px">
+            Your browser blocked the new tab. The request is logged;
+            <a [href]="url" target="_blank" rel="noopener noreferrer" (click)="closed.emit()">open the support session</a>
+            within 2 minutes.
+          </div>
+        }
+        @if (error(); as message) {
+          <div class="warning" role="alert" style="margin-bottom: 14px">{{ message }}</div>
+        }
+
+        @if (!user()) {
+          <div class="field" style="margin-bottom: 14px" [class.invalid]="invalid('targetUserId')">
+            <label for="impTargetUser">Tenant user</label>
+            <select id="impTargetUser" formControlName="targetUserId">
+              @if (users() === null) {
+                <option value="">Loading users…</option>
+              }
+              @for (u of activeUsers(); track u.userId) {
+                <option [value]="u.userId">{{ u.fullName }} — {{ u.email }}</option>
+              } @empty {
+                @if (users() !== null) { <option value="">No active users</option> }
+              }
+            </select>
+            @if (invalid('targetUserId')) { <span class="error">Choose an active tenant user.</span> }
+          </div>
+        }
+
+        <div class="field" style="margin-bottom: 14px">
+          <label for="impDuration">Session duration</label>
+          <select id="impDuration" formControlName="durationMinutes">
+            @for (d of durations; track d.minutes) {
+              <option [ngValue]="d.minutes">{{ d.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="field" style="margin-bottom: 14px" [class.invalid]="invalid('reason')">
+          <label for="impReason">Reason</label>
+          <select id="impReason" formControlName="reason">
+            <option value="">Select a reason</option>
+            @for (r of reasons; track r) {
+              <option [value]="r">{{ r }}</option>
+            }
+          </select>
+          @if (invalid('reason')) { <span class="error">Select a reason.</span> }
+        </div>
+
+        <div class="field" [class.invalid]="invalid('comment')">
+          <label for="impComment">Comment for the reason</label>
+          <textarea id="impComment" formControlName="comment" maxlength="1000"
+                    placeholder="Explain why you need to impersonate this user..."></textarea>
+          @if (invalid('comment')) { <span class="error">Add a comment explaining why.</span> }
+        </div>
+
+        <label style="display: flex; gap: 8px; align-items: flex-start; color: var(--py-ink-muted); font-size: 11px; line-height: 1.6; margin: 16px 0 0">
+          <input type="checkbox" formControlName="acknowledged" style="margin-top: 3px" />
+          I confirm this is an authorized support action and understand the details will be recorded in the audit log.
+        </label>
+        @if (invalid('acknowledged')) {
+          <span class="error" style="color: var(--py-status-blocked); font-size: 10px">Confirm before continuing.</span>
+        }
+
+        <div class="warning" style="margin-top: 14px">
+          The customer app opens in a new tab, signed in as this user with your name attached. The session ends
+          when the time runs out or you end it from the banner.
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn" (click)="close()">Cancel</button>
+        <button type="submit" class="btn primary" [disabled]="busy()">
+          @if (busy()) { <span class="spinner" aria-hidden="true"></span>Starting } @else { Submit and log }
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

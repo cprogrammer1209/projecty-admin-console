@@ -1,0 +1,90 @@
+<section>
+  <div class="head">
+    <div>
+      <div class="eyebrow">PLATFORM / ORGANIZATIONS</div>
+      <h1>Tenants</h1>
+      <p>Customer workspaces, their users, and support access.</p>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><small>Total tenants</small><strong>{{ tenants()?.length ?? '–' }}</strong><div class="foot">All customer workspaces</div></div>
+    <div class="metric"><small>Total users</small><strong>{{ tenants() ? totalUsers() : '–' }}</strong><div class="foot">Across all tenants</div></div>
+    <div class="metric"><small>Active users</small><strong>{{ tenants() ? activeUsers() : '–' }}</strong><div class="foot">Can sign in</div></div>
+    <div class="metric"><small>Support access</small><strong>Audited</strong><div class="foot">Every impersonation is logged</div></div>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>All tenants</h2>
+          <p>Click a tenant name to view its details, users and activity.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tenant</th><th>Users</th><th>Owner</th><th>Created</th><th>Actions</th></tr></thead>
+          <tbody>
+            @if (!tenants()) {
+              <tr><td colspan="5" class="loading">Loading tenants…</td></tr>
+            } @else {
+              @for (t of visible(); track t.id) {
+                <tr>
+                  <td>
+                    <div class="tenant">
+                      <span class="tenant-mark">{{ initials(t.name) }}</span>
+                      <div>
+                        <button class="link-btn" type="button" (click)="open(t)">{{ t.name }}</button>
+                        <small>{{ t.slug }}.projecty.app</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ t.activeUserCount }} / {{ t.userCount }}</td>
+                  <td>{{ t.ownerName ?? '—' }}<br /><span style="color: var(--py-ink-muted)">{{ t.ownerEmail }}</span></td>
+                  <td>{{ t.createdAt | date: 'mediumDate' }}</td>
+                  <td>
+                    <div class="row-actions">
+                      <button class="icon-btn" type="button" title="Sign in as tenant user" aria-label="Sign in as tenant user"
+                              [disabled]="t.activeUserCount === 0" (click)="impersonating.set(t)"><pa-icon name="login" /></button>
+                      <a class="icon-btn" title="Tenant details" aria-label="Tenant details" [routerLink]="['/tenants', t.id]"><pa-icon name="more" /></a>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="5" class="empty">{{ loadFailed() ? "Couldn't load tenants. Refresh to try again." : 'No tenants match your search.' }}</td></tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span>Showing {{ visible().length }} tenant{{ visible().length === 1 ? '' : 's' }}</span>
+        <span>Tenants are portals created in ProjectY</span>
+      </div>
+    </section>
+
+    <div class="side-stack">
+      <section class="panel side-card">
+        <h3>Administration shortcuts</h3>
+        <p>Frequently used platform operations.</p>
+        <a class="btn" routerLink="/audit">View platform audit logs</a>
+      </section>
+      <section class="panel side-card">
+        <h3>Access overview</h3>
+        <div class="side-row"><span>Tenant isolation</span><strong>Enabled</strong></div>
+        <div class="side-row"><span>Impersonation</span><strong>Audited</strong></div>
+        <div class="side-row"><span>Permissions editor</span><strong>Later</strong></div>
+      </section>
+      <div class="callout">
+        <strong>Security note</strong><br />
+        Sign-in-as is a privileged support action. Sessions are time-limited, run as the user with your name
+        attached, and every step is written to the audit log.
+      </div>
+    </div>
+  </div>
+</section>
+
+@if (impersonating(); as tenant) {
+  <pa-impersonation-dialog [tenant]="tenant" (closed)="impersonating.set(null)" />
+}
