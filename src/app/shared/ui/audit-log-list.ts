@@ -9,6 +9,12 @@ const ACTION_TEXT: Record<string, (e: AuditEvent) => string> = {
   IMPERSONATION_STARTED: (e) => `signed in as ${e.targetName ?? 'a user'}`,
   IMPERSONATION_ENDED: (e) => `ended the support session as ${e.targetName ?? 'a user'}`,
   PORTAL_SETTINGS_CHANGED: () => 'changed portal settings',
+  USER_INVITED: (e) => `invited ${e.targetName ?? 'someone'}`,
+  INVITATION_REVOKED: (e) => `withdrew the invitation to ${e.targetName ?? 'someone'}`,
+  INVITATION_ACCEPTED: () => 'accepted an invitation and joined',
+  USER_PROFILE_CHANGED: (e) => `changed the profile of ${e.targetName ?? 'a user'}`,
+  USER_DEACTIVATED: (e) => `deactivated ${e.targetName ?? 'a user'}`,
+  USER_REACTIVATED: (e) => `reactivated ${e.targetName ?? 'a user'}`,
 };
 
 /** "requested impersonation of Arun Kumar", without the actor. */
